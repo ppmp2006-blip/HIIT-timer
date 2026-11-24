@@ -13,7 +13,7 @@
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       margin: 0;
-      padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom) 20px;
+      padding: env(safe-area-inset-top) 18px env(safe-area-inset-bottom) 18px;
       height: 100dvh;
       display: flex;
       flex-direction: column;
@@ -23,10 +23,11 @@
       transition: background-color 0.3s ease;
       overflow: hidden;
     }
-    body.prepare { background-color: #e67e22; }
-    body.work    { background-color: #d63031; }
-    body.rest    { background-color: #00b894; }
-    body.done    { background-color: #0984e3; }
+    body.prepare    { background-color: #e67e22; }
+    body.work       { background-color: #d63031; }
+    body.rest       { background-color: #00b894; }
+    body.cycle_rest { background-color: #6c5ce7; } /* 循環間大休息：紫色 */
+    body.done       { background-color: #0984e3; }
 
     /* 頂部列 */
     .header {
@@ -34,27 +35,30 @@
       justify-content: space-between;
       align-items: center;
       padding-top: 12px;
+      gap: 6px;
     }
     .round-badge {
       background: rgba(255, 255, 255, 0.2);
-      padding: 6px 14px;
+      padding: 6px 12px;
       border-radius: 20px;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 700;
+      white-space: nowrap;
     }
     .top-actions {
       display: flex;
-      gap: 8px;
+      gap: 6px;
     }
     .pill-btn {
       background: rgba(255, 255, 255, 0.16);
       color: white;
       border: none;
-      padding: 6px 12px;
+      padding: 6px 11px;
       border-radius: 20px;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 600;
       cursor: pointer;
+      white-space: nowrap;
     }
 
     /* 菜單橫向滑動列 */
@@ -93,17 +97,17 @@
       margin: auto 0;
     }
     .status {
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       font-weight: 700;
       opacity: 0.9;
       margin-bottom: 4px;
     }
     .exercise-name {
-      font-size: 2.1rem;
+      font-size: 2rem;
       font-weight: 900;
       letter-spacing: 1px;
       margin-bottom: 6px;
-      min-height: 2.6rem;
+      min-height: 2.5rem;
     }
     .timer {
       font-size: 20vw;
@@ -113,18 +117,18 @@
     }
     .next-up {
       margin-top: 10px;
-      font-size: 1rem;
+      font-size: 0.95rem;
       opacity: 0.85;
       min-height: 1.4rem;
     }
 
-    /* 參數快速調整區 */
+    /* 參數快速調整區：4 欄（運動、休息、組數、重複循環） */
     .settings {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
       background: rgba(0, 0, 0, 0.25);
-      padding: 12px;
+      padding: 12px 10px;
       border-radius: 16px;
       margin-bottom: 14px;
     }
@@ -132,14 +136,15 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: rgba(255,255,255,0.85);
+      white-space: nowrap;
     }
     .settings input {
       margin-top: 5px;
       width: 100%;
       padding: 8px 0;
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       font-weight: bold;
       text-align: center;
       border: none;
@@ -180,7 +185,7 @@
     .modal-content {
       background: #2d3436;
       width: 100%;
-      max-height: 82dvh;
+      max-height: 85dvh;
       border-radius: 24px 24px 0 0;
       padding: 22px 20px;
       display: flex;
@@ -207,24 +212,29 @@
     .form-group { margin-bottom: 12px; }
     .form-group label {
       display: block;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       margin-bottom: 5px;
       color: rgba(255,255,255,0.85);
     }
     .form-group input, .form-group textarea {
       width: 100%;
-      padding: 10px 12px;
+      padding: 10px 8px;
       border-radius: 10px;
       border: none;
-      font-size: 1rem;
+      font-size: 0.95rem;
       background: rgba(255,255,255,0.95);
       color: #1e272e;
       font-family: inherit;
     }
-    .form-row {
+    .form-row-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .form-row-3 {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      gap: 8px;
     }
     .save-btn {
       background: #00b894;
@@ -256,9 +266,9 @@
     }
     .card-sub {
       color: rgba(255,255,255,0.65);
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       margin-top: 4px;
-      line-height: 1.3;
+      line-height: 1.35;
     }
     .del-btn {
       background: rgba(214, 48, 49, 0.85);
@@ -284,7 +294,7 @@
 
   <!-- 頂部狀態與工具列 -->
   <div class="header">
-    <div class="round-badge" id="roundDisplay">組數 0 / 8</div>
+    <div class="round-badge" id="roundDisplay">第 1/1 輪 • 組 0/8</div>
     <div class="top-actions">
       <button class="pill-btn" id="managePresetsBtn">管理菜單</button>
       <button class="pill-btn" id="openHistoryBtn">紀錄 (0)</button>
@@ -307,7 +317,8 @@
     <div class="settings" id="settingsPanel">
       <label>運動(秒)<input type="number" id="workInput" value="20" min="1" inputmode="numeric"></label>
       <label>休息(秒)<input type="number" id="restInput" value="10" min="1" inputmode="numeric"></label>
-      <label>總組數<input type="number" id="roundsInput" value="8" min="1" inputmode="numeric"></label>
+      <label>每輪組數<input type="number" id="roundsInput" value="8" min="1" inputmode="numeric"></label>
+      <label>重複輪數<input type="number" id="cyclesInput" value="1" min="1" inputmode="numeric"></label>
     </div>
 
     <div class="controls">
@@ -330,10 +341,14 @@
           <label>菜單名稱（例如：下肢爆汗、拳擊有氧）</label>
           <input type="text" id="newPresetName" placeholder="輸入菜單名稱">
         </div>
-        <div class="form-row form-group">
+        <div class="form-row-3 form-group">
           <div><label>運動(秒)</label><input type="number" id="newPresetWork" value="30" min="1" inputmode="numeric"></div>
-          <div><label>休息(秒)</label><input type="number" id="newPresetRest" value="15" min="1" inputmode="numeric"></div>
-          <div><label>總組數</label><input type="number" id="newPresetRounds" value="6" min="1" inputmode="numeric"></div>
+          <div><label>組間休息(秒)</label><input type="number" id="newPresetRest" value="15" min="1" inputmode="numeric"></div>
+          <div><label>每輪組數</label><input type="number" id="newPresetRounds" value="4" min="1" inputmode="numeric"></div>
+        </div>
+        <div class="form-row-2 form-group">
+          <div><label>重複輪數 (Cycles)</label><input type="number" id="newPresetCycles" value="3" min="1" inputmode="numeric"></div>
+          <div><label>輪間大休息(秒)</label><input type="number" id="newPresetCycleRest" value="60" min="0" inputmode="numeric"></div>
         </div>
         <div class="form-group">
           <label>對應動作清單（用逗號分隔，會依組數自動循環）</label>
@@ -362,9 +377,9 @@
 <script>
   // --- 0. 記憶模組與預設菜單 ---
   const STORAGE_KEYS = {
-    PRESETS: 'hiit_app_presets_v1',
-    ACTIVE_ID: 'hiit_app_active_preset_v1',
-    HISTORY: 'hiit_app_history_v1'
+    PRESETS: 'hiit_app_presets_v2',
+    ACTIVE_ID: 'hiit_app_active_preset_v2',
+    HISTORY: 'hiit_app_history_v2'
   };
 
   const DEFAULT_PRESETS = [
@@ -374,23 +389,29 @@
       work: 20,
       rest: 10,
       rounds: 8,
+      cycles: 1,
+      cycleRest: 60,
       exercises: ['波比跳', '高抬腿', '深蹲跳', '登山者']
     },
     {
-      id: 'p_hiit',
-      name: '全身燃脂 HIIT',
+      id: 'p_hiit_3x4',
+      name: '全身循環 3 輪',
       work: 40,
       rest: 20,
-      rounds: 6,
-      exercises: ['開合跳', '伏地挺身', '交替弓箭步', '棒式開合', '深蹲', '仰臥捲腹']
+      rounds: 4,
+      cycles: 3,
+      cycleRest: 60,
+      exercises: ['開合跳', '伏地挺身', '交替弓箭步', '仰臥捲腹']
     },
     {
       id: 'p_core',
-      name: '核心強化',
+      name: '核心強化 2 輪',
       work: 30,
       rest: 15,
-      rounds: 6,
-      exercises: ['標準棒式', '俄羅斯轉體', '死蟲式', '側棒式(左)', '側棒式(右)', '單車式捲腹']
+      rounds: 4,
+      cycles: 2,
+      cycleRest: 45,
+      exercises: ['標準棒式', '俄羅斯轉體', '死蟲式', '單車式捲腹']
     }
   ];
 
@@ -400,6 +421,7 @@
   const workInput = document.getElementById('workInput');
   const restInput = document.getElementById('restInput');
   const roundsInput = document.getElementById('roundsInput');
+  const cyclesInput = document.getElementById('cyclesInput');
   const exerciseEl = document.getElementById('exerciseDisplay');
   const nextUpEl = document.getElementById('nextUpDisplay');
 
@@ -407,7 +429,6 @@
     return presets.find(p => p.id === activePresetId) || presets[0];
   }
 
-  // 取得第 N 組的動作名稱 (round 從 1 開始)
   function getExerciseForRound(roundNum) {
     const preset = getActivePreset();
     if (!preset.exercises || preset.exercises.length === 0) {
@@ -416,7 +437,6 @@
     return preset.exercises[(roundNum - 1) % preset.exercises.length];
   }
 
-  // 渲染上方菜單膠囊列
   function renderPresetBar() {
     const bar = document.getElementById('presetBar');
     bar.innerHTML = presets.map(p => `
@@ -427,7 +447,7 @@
 
     bar.querySelectorAll('.preset-chip[data-id]').forEach(btn => {
       btn.addEventListener('click', () => {
-        if (state !== 'IDLE' && state !== 'DONE') return; // 計時中鎖定切換
+        if (state !== 'IDLE' && state !== 'DONE') return;
         selectPreset(btn.dataset.id);
       });
     });
@@ -435,7 +455,6 @@
     document.getElementById('quickAddChip').addEventListener('click', openPresetModal);
   }
 
-  // 切換套用指定菜單
   function selectPreset(id) {
     activePresetId = id;
     localStorage.setItem(STORAGE_KEYS.ACTIVE_ID, id);
@@ -443,23 +462,25 @@
     workInput.value = preset.work;
     restInput.value = preset.rest;
     roundsInput.value = preset.rounds;
+    cyclesInput.value = preset.cycles || 1;
     renderPresetBar();
     updateIdleDisplay();
   }
 
-  // 若使用者直接在主畫面微調數字，同步更新目前菜單並記憶
-  [workInput, restInput, roundsInput].forEach(input => {
+  // 即時記憶主畫面修改的數字
+  [workInput, restInput, roundsInput, cyclesInput].forEach(input => {
     input.addEventListener('change', () => {
       const preset = getActivePreset();
       preset.work = parseInt(workInput.value, 10) || 20;
       preset.rest = parseInt(restInput.value, 10) || 10;
       preset.rounds = parseInt(roundsInput.value, 10) || 8;
+      preset.cycles = parseInt(cyclesInput.value, 10) || 1;
       localStorage.setItem(STORAGE_KEYS.PRESETS, JSON.stringify(presets));
       if (state === 'IDLE') updateIdleDisplay();
     });
   });
 
-  // 菜單管理彈窗邏輯
+  // 菜單管理彈窗
   const presetModal = document.getElementById('presetModal');
   function openPresetModal() {
     if (state !== 'IDLE' && state !== 'DONE') return;
@@ -469,15 +490,21 @@
 
   function renderPresetManageList() {
     const listEl = document.getElementById('presetManageList');
-    listEl.innerHTML = presets.map(p => `
-      <div class="card-item">
-        <div>
-          <strong>${p.name}</strong> <span style="font-size:0.8rem; opacity:0.7;">(${p.work}秒/${p.rest}秒 × ${p.rounds}組)</span>
-          <div class="card-sub">動作：${p.exercises.length ? p.exercises.join(' → ') : '無指定動作'}</div>
+    listEl.innerHTML = presets.map(p => {
+      const cyc = p.cycles || 1;
+      const cycRest = p.cycleRest ?? 60;
+      const cycleInfo = cyc > 1 ? ` × 重複${cyc}輪 (輪休${cycRest}秒)` : '';
+      return `
+        <div class="card-item">
+          <div>
+            <strong>${p.name}</strong>
+            <div class="card-sub">${p.work}秒運動 / ${p.rest}秒休息 × ${p.rounds}組${cycleInfo}</div>
+            <div class="card-sub">動作：${p.exercises.length ? p.exercises.join(' → ') : '無指定動作'}</div>
+          </div>
+          ${presets.length > 1 ? `<button class="del-btn" data-del="${p.id}">刪除</button>` : ''}
         </div>
-        ${presets.length > 1 ? `<button class="del-btn" data-del="${p.id}">刪除</button>` : ''}
-      </div>
-    `).join('');
+      `;
+    }).join('');
 
     listEl.querySelectorAll('.del-btn').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -502,9 +529,10 @@
     }
     const work = parseInt(document.getElementById('newPresetWork').value, 10) || 30;
     const rest = parseInt(document.getElementById('newPresetRest').value, 10) || 15;
-    const rounds = parseInt(document.getElementById('newPresetRounds').value, 10) || 6;
+    const rounds = parseInt(document.getElementById('newPresetRounds').value, 10) || 4;
+    const cycles = parseInt(document.getElementById('newPresetCycles').value, 10) || 1;
+    const cycleRest = parseInt(document.getElementById('newPresetCycleRest').value, 10) || 0;
     const rawEx = document.getElementById('newPresetExercises').value;
-    // 支援全形與半形逗號或換行分隔
     const exercises = rawEx.split(/[,，\n]+/).map(s => s.trim()).filter(Boolean);
 
     const newPreset = {
@@ -513,13 +541,14 @@
       work,
       rest,
       rounds,
+      cycles,
+      cycleRest,
       exercises
     };
 
     presets.push(newPreset);
     localStorage.setItem(STORAGE_KEYS.PRESETS, JSON.stringify(presets));
 
-    // 清空表單並切換到新菜單
     document.getElementById('newPresetName').value = '';
     document.getElementById('newPresetExercises').value = '';
     selectPreset(newPreset.id);
@@ -528,16 +557,19 @@
   });
 
   // --- 歷史紀錄模組 ---
-  function saveWorkoutRecord(presetName, work, rest, rounds) {
+  function saveWorkoutRecord(presetName, work, rest, rounds, cycles, cycleRest) {
     const history = JSON.parse(localStorage.getItem(STORAGE_KEYS.HISTORY) || '[]');
     const now = new Date();
     const dateStr = `${now.getFullYear()}/${String(now.getMonth()+1).padStart(2,'0')}/${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-    const totalSec = (work + rest) * rounds - rest;
+
+    const oneCycleSec = (work + rest) * rounds - rest;
+    const totalSec = oneCycleSec * cycles + cycleRest * (cycles - 1);
+    const cycleText = cycles > 1 ? ` × ${cycles}輪` : '';
 
     history.unshift({
       date: dateStr,
       presetName,
-      detail: `${work}秒運動 / ${rest}秒休息 × ${rounds}組`,
+      detail: `${work}秒/${rest}秒 × ${rounds}組${cycleText}`,
       duration: `${Math.floor(totalSec / 60)}分${totalSec % 60}秒`
     });
 
@@ -620,12 +652,16 @@
     }
   }
 
-  // --- 3. 計時器狀態機 ---
-  let state = 'IDLE';
+  // --- 3. 計時器狀態機 (支援多輪重複循環) ---
+  let state = 'IDLE'; // IDLE, PREPARE, WORK, REST, CYCLE_REST, DONE
   let currentRound = 1;
   let totalRounds = 8;
+  let currentCycle = 1;
+  let totalCycles = 1;
   let workSec = 20;
   let restSec = 10;
+  let cycleRestSec = 60;
+
   let timerId = null;
   let endTime = 0;
   let remainingMs = 0;
@@ -639,14 +675,19 @@
   const settingsPanel = document.getElementById('settingsPanel');
   const presetBarEl = document.getElementById('presetBar');
 
+  function updateBadge() {
+    roundEl.textContent = `第 ${currentCycle}/${totalCycles} 輪 • 組 ${currentRound}/${totalRounds}`;
+  }
+
   function updateIdleDisplay() {
     const preset = getActivePreset();
     const w = parseInt(workInput.value, 10) || 20;
     const r = parseInt(roundsInput.value, 10) || 8;
+    const c = parseInt(cyclesInput.value, 10) || 1;
     const mins = String(Math.floor(w / 60)).padStart(2, '0');
     const secs = String(w % 60).padStart(2, '0');
     timeEl.textContent = `${mins}:${secs}`;
-    roundEl.textContent = `組數 0 / ${r}`;
+    roundEl.textContent = `第 1/${c} 輪 • 組 0/${r}`;
     exerciseEl.textContent = preset.name;
     nextUpEl.textContent = `第 1 組：${getExerciseForRound(1)}`;
   }
@@ -661,39 +702,56 @@
       const firstEx = getExerciseForRound(1);
       statusEl.textContent = '準備姿勢';
       exerciseEl.textContent = firstEx;
-      nextUpEl.textContent = `即將開始第 1 組`;
+      nextUpEl.textContent = `第 1 輪第 1 組即將開始`;
       beep(440, 0.2);
       speak(`準備開始，第一個動作，${firstEx}`);
     } else if (newState === 'WORK') {
       const currentEx = getExerciseForRound(currentRound);
       statusEl.textContent = '全力衝刺！';
       exerciseEl.textContent = currentEx;
-      roundEl.textContent = `組數 ${currentRound} / ${totalRounds}`;
-      nextUpEl.textContent = currentRound < totalRounds ? `下一組：${getExerciseForRound(currentRound + 1)}` : '最後一組，撐住！';
+      updateBadge();
+
+      if (currentRound < totalRounds) {
+        nextUpEl.textContent = `下一組：${getExerciseForRound(currentRound + 1)}`;
+      } else if (currentCycle < totalCycles) {
+        nextUpEl.textContent = `本輪最後一組，接著輪間大休息`;
+      } else {
+        nextUpEl.textContent = `最終組數，全力以赴！`;
+      }
+
       beep(880, 0.35);
       vibrate([200, 100, 200]);
       speak(`${currentEx}，開始`);
     } else if (newState === 'REST') {
       const nextEx = getExerciseForRound(currentRound + 1);
-      statusEl.textContent = '休息喘氣';
+      statusEl.textContent = '組間休息';
       exerciseEl.textContent = '調整呼吸';
       nextUpEl.textContent = `下一組 (${currentRound + 1}/${totalRounds})：${nextEx}`;
       beep(520, 0.3);
       vibrate(300);
       speak(`休息一下，下一組是${nextEx}`);
+    } else if (newState === 'CYCLE_REST') {
+      const nextEx = getExerciseForRound(1);
+      statusEl.textContent = `第 ${currentCycle} 輪完成！大休息`;
+      exerciseEl.textContent = '補充水分';
+      nextUpEl.textContent = `即將進入第 ${currentCycle + 1} 輪：${nextEx}`;
+      beep(440, 0.25);
+      setTimeout(() => beep(660, 0.3), 180);
+      vibrate([300, 150, 300]);
+      speak(`完成第 ${currentCycle} 輪，大休息一下`);
     } else if (newState === 'DONE') {
       const preset = getActivePreset();
-      statusEl.textContent = '訓練完成！';
+      statusEl.textContent = '全部訓練完成！';
       exerciseEl.textContent = preset.name;
       timeEl.textContent = '00:00';
-      nextUpEl.textContent = '太棒了，記得補充水分！';
+      nextUpEl.textContent = `共完成 ${totalCycles} 輪訓練，太強了！`;
       beep(880, 0.15);
       setTimeout(() => beep(1100, 0.4), 200);
       vibrate([300, 100, 300, 100, 500]);
-      speak('恭喜完成訓練');
+      speak('恭喜完成所有訓練');
       clearInterval(timerId);
       releaseWakeLock();
-      saveWorkoutRecord(preset.name, workSec, restSec, totalRounds);
+      saveWorkoutRecord(preset.name, workSec, restSec, totalRounds, totalCycles, cycleRestSec);
       startPauseBtn.textContent = '再來一輪';
       settingsPanel.style.pointerEvents = 'auto';
       settingsPanel.style.opacity = '1';
@@ -705,11 +763,29 @@
   function tick() {
     const diff = endTime - Date.now();
     if (diff <= 0) {
-      if (state === 'PREPARE') enterPhase('WORK', workSec);
-      else if (state === 'WORK') {
-        currentRound >= totalRounds ? enterPhase('DONE', 0) : enterPhase('REST', restSec);
+      if (state === 'PREPARE') {
+        enterPhase('WORK', workSec);
+      } else if (state === 'WORK') {
+        if (currentRound < totalRounds) {
+          enterPhase('REST', restSec);
+        } else if (currentCycle < totalCycles) {
+          // 該輪結束，進入輪間大休息（若輪休設為 0 秒則直接進入下一輪）
+          if (cycleRestSec > 0) {
+            enterPhase('CYCLE_REST', cycleRestSec);
+          } else {
+            currentCycle++;
+            currentRound = 1;
+            enterPhase('WORK', workSec);
+          }
+        } else {
+          enterPhase('DONE', 0);
+        }
       } else if (state === 'REST') {
         currentRound++;
+        enterPhase('WORK', workSec);
+      } else if (state === 'CYCLE_REST') {
+        currentCycle++;
+        currentRound = 1;
         enterPhase('WORK', workSec);
       }
       return;
@@ -730,10 +806,15 @@
     if (audioCtx.state === 'suspended') audioCtx.resume();
 
     if (state === 'IDLE' || state === 'DONE') {
+      const preset = getActivePreset();
       workSec = parseInt(workInput.value, 10) || 20;
       restSec = parseInt(restInput.value, 10) || 10;
       totalRounds = parseInt(roundsInput.value, 10) || 8;
+      totalCycles = parseInt(cyclesInput.value, 10) || 1;
+      cycleRestSec = preset.cycleRest ?? 60;
+
       currentRound = 1;
+      currentCycle = 1;
       isPaused = false;
 
       settingsPanel.style.pointerEvents = 'none';
@@ -757,7 +838,13 @@
       endTime = Date.now() + remainingMs;
       requestWakeLock();
       startPauseBtn.textContent = '暫停';
-      statusEl.textContent = state === 'WORK' ? '全力衝刺！' : (state === 'REST' ? '休息喘氣' : '準備姿勢');
+      const statusMap = {
+        WORK: '全力衝刺！',
+        REST: '組間休息',
+        CYCLE_REST: `第 ${currentCycle} 輪完成！大休息`,
+        PREPARE: '準備姿勢'
+      };
+      statusEl.textContent = statusMap[state] || '進行中';
       timerId = setInterval(tick, 100);
     }
   });
